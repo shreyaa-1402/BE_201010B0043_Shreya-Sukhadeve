@@ -1,0 +1,38 @@
+class Solution:
+    def solveSudoku(self, board: List[List[str]]) -> None:
+        
+        EMPTY_CELL = '.'
+        target = set(str(n) for n in range(1, 10))
+
+        def _validate():
+            cols = [[board[r][c] for r in range(9)] for c in range(9)]
+            boxes = []
+            for i in (0, 3, 6):
+                for j in (0, 3, 6):
+                    boxes.append([board[a][b] for a in range(i, i + 3) for b in range(j, j + 3)])
+
+            valid_rows = all(set(row) == target for row in board)
+            valid_cols = all(set(col) == target for col in cols)
+            valid_boxes = all(set(box) == target for box in boxes)
+            return valid_rows and valid_cols and valid_boxes
+
+        def helper(r, c):
+            if c == len(board[0]):
+                return helper(r + 1, 0)
+
+            if r == len(board):
+                return True  # Entire board is filled successfully
+
+            if not board[r][c] == EMPTY_CELL:
+                return helper(r, c + 1)
+
+            for n in range(1, 10):
+                board[r][c] = str(n)
+                if _validate() and helper(r, c + 1):
+                    return True
+
+            # If no valid number is found, backtrack
+            board[r][c] = EMPTY_CELL
+            return False
+
+        helper(0,0)
