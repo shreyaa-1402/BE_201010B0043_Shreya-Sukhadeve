@@ -1,0 +1,21 @@
+def rob(nums):
+    if not nums:
+        return 0
+    if len(nums) == 1:
+        return nums[0]
+        
+    def simple_rob(nums):
+        prev, curr = 0, 0
+        for num in nums:
+            prev, curr = curr, max(curr, prev + num)
+            return curr
+            
+    return max(simple_rob(nums[1:]),
+simple_rob(nums[:-1]))
+
+nums1 = [2,3,2]
+print(rob(nums1))
+nums2 = [1,2,3,1]
+print(rob(nums2))
+nums3 = [1,2,3]
+print(rob(nums3))
